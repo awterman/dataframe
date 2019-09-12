@@ -3,7 +3,8 @@ package dataframe
 type Type int
 
 const (
-	Bool Type = iota
+	None Type = iota
+	Bool
 	Number
 	String
 )
@@ -48,3 +49,22 @@ func (n *nameImpl) Rename(s string) { *n = nameImpl(s) }
 func (na naImpl) IsNA(i int) bool { return na[i] }
 func (na naImpl) SetNA(i int)     { na[i] = true }
 func (na naImpl) Len() int        { return len(na) }
+
+func NewSeries(t Type, name string, nrow int) Series {
+	var f func(name string, nrow int) Series
+
+	switch t {
+	case None:
+		f = NewPlaceholderSeries
+	case Bool:
+		f = NewBoolSeries
+	case Number:
+		f = NewNumberSeries
+	case String:
+		f = NewStringSeries
+	default:
+		panic("unknown type: " + string(t))
+	}
+
+	return f(name, nrow)
+}

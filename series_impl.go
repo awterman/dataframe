@@ -149,3 +149,26 @@ func (ss *stringSeries) Select(indexes []int) Series {
 		naImpl:   na,
 	}
 }
+
+type placeholderSeries struct {
+	disableBool
+	disableNumber
+	disableString
+	nameImpl
+
+	nrow int
+}
+
+func NewPlaceholderSeries(name string, nrow int) Series {
+	return &placeholderSeries{
+		nameImpl: nameImpl(name),
+		nrow:     nrow,
+	}
+}
+
+func (ps *placeholderSeries) IsNA(int) bool       { return true }
+func (ps *placeholderSeries) SetNA(int)           {}
+func (ps *placeholderSeries) Len() int            { return ps.nrow }
+func (ps *placeholderSeries) Type() Type          { return None }
+func (ps *placeholderSeries) Copy() Series        { return ps }
+func (ps *placeholderSeries) Select([]int) Series { return ps }
