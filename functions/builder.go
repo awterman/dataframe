@@ -68,6 +68,8 @@ func (b *Builder) WriteRow(row map[string]interface{}) {
 
 		set(col)
 	}
+
+	b.rowsWritten++
 }
 
 func (b *Builder) Build() dataframe.DataFrame {
