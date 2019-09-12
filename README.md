@@ -1,3 +1,3 @@
 # dataframe
 
-[![GoDoc](https://godoc.org/github.com/allegro/bigcache?status.svg)](https://godoc.org/github.com/allegro/bigcache)
+[![GoDoc](https://github.com/awterman/dataframe?status.svg)](https://godoc.org/github.com/awterman/dataframe)
