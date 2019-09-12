@@ -36,7 +36,7 @@ func (df *dataFrame) GetAllSeries() []Series {
 
 func (df *dataFrame) GetSeries(name string) (index int, s Series, ok bool) {
 	for i, s := range df.series {
-		if s.Name() == name {
+		if Name() == name {
 			return i, s, true
 		}
 	}
@@ -44,11 +44,11 @@ func (df *dataFrame) GetSeries(name string) (index int, s Series, ok bool) {
 }
 
 func (df *dataFrame) SetSeries(series Series) error {
-	if series.Len() != df.nrow {
+	if Len() != df.nrow {
 		return fmt.Errorf("nrow not equal")
 	}
 
-	if index, _, ok := df.GetSeries(series.Name()); ok {
+	if index, _, ok := df.GetSeries(Name()); ok {
 		df.series[index] = series
 		return nil
 	}

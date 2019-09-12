@@ -1,11 +1,10 @@
 package functions
 
 import (
+	dataframe2 "dataframe"
 	"fmt"
 	"math"
 	"sort"
-
-	"dataframe/dataframe"
 )
 
 func Range(n int) []int {
@@ -16,12 +15,12 @@ func Range(n int) []int {
 	return r
 }
 
-func Copy(df dataframe.DataFrame) dataframe.DataFrame {
+func Copy(df dataframe2.DataFrame) dataframe2.DataFrame {
 	return Select(df, Range(df.NCol()))
 }
 
-func Select(df dataframe.DataFrame, indexes []int) dataframe.DataFrame {
-	ndf := dataframe.NewDataFrame(df.NRow())
+func Select(df dataframe2.DataFrame, indexes []int) dataframe2.DataFrame {
+	ndf := dataframe2.NewDataFrame(df.NRow())
 
 	series := df.GetAllSeries()
 
@@ -32,12 +31,12 @@ func Select(df dataframe.DataFrame, indexes []int) dataframe.DataFrame {
 	return ndf
 }
 
-func Combine(a, b dataframe.DataFrame) (dataframe.DataFrame, error) {
+func Combine(a, b dataframe2.DataFrame) (dataframe2.DataFrame, error) {
 	if a.NRow() != b.NRow() {
 		return nil, fmt.Errorf("nrow not equal")
 	}
 
-	c := dataframe.NewDataFrame(a.NRow())
+	c := dataframe2.NewDataFrame(a.NRow())
 	for _, s := range a.GetAllSeries() {
 		c.SetSeries(s)
 	}
@@ -49,7 +48,7 @@ func Combine(a, b dataframe.DataFrame) (dataframe.DataFrame, error) {
 	return c, nil
 }
 
-func Sort(df dataframe.DataFrame, colName string, lesser func(col dataframe.Series) func(i, j int) bool) (dataframe.DataFrame, error) {
+func Sort(df dataframe2.DataFrame, colName string, lesser func(col dataframe2.Series) func(i, j int) bool) (dataframe2.DataFrame, error) {
 	_, col, ok := df.GetSeries(colName)
 	if !ok {
 		return nil, fmt.Errorf("series not found")
@@ -58,15 +57,15 @@ func Sort(df dataframe.DataFrame, colName string, lesser func(col dataframe.Seri
 	rowIndexs := Range(df.NRow())
 	sort.Slice(rowIndexs, lesser(col))
 
-	ndf := dataframe.NewDataFrame(df.NRow())
+	ndf := dataframe2.NewDataFrame(df.NRow())
 	for _, s := range df.GetAllSeries() {
 		df.SetSeries(s.Select(rowIndexs))
 	}
 	return ndf, nil
 }
 
-func Max(s dataframe.Series) (float64, error) {
-	if s.Type() != dataframe.Number {
+func Max(s dataframe2.Series) (float64, error) {
+	if s.Type() != dataframe2.Number {
 		return 0, fmt.Errorf("not number series")
 	}
 
@@ -77,8 +76,8 @@ func Max(s dataframe.Series) (float64, error) {
 	return max, nil
 }
 
-func Min(s dataframe.Series) (float64, error) {
-	if s.Type() != dataframe.Number {
+func Min(s dataframe2.Series) (float64, error) {
+	if s.Type() != dataframe2.Number {
 		return 0, fmt.Errorf("not number series")
 	}
 
