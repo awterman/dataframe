@@ -1,8 +1,9 @@
 package functions
 
 import (
-	"dataframe"
 	"fmt"
+
+	"github.com/awterman/dataframe"
 )
 
 type Builder struct {

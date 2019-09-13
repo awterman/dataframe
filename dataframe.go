@@ -89,6 +89,7 @@ func (df *dataFrame) AppendSeries(series ...Series) error {
 	}
 
 	df.series = append(df.series, series...)
+	return nil
 }
 
 func (df *dataFrame) Copy() DataFrame {
