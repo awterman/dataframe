@@ -1,55 +1,74 @@
 package dataframe
 
-//noinspection SpellCheckingInspection
+import (
+	"fmt"
+	"strings"
+)
+
 type boolSeries struct {
 	disableNumber
 	disableString
 
 	nameImpl
 	naImpl
-	bools []bool
+	value []bool
 }
 
 func NewBoolSeries(name string, nrow int) Series {
 	return &boolSeries{
 		nameImpl: nameImpl(name),
 		naImpl:   make(naImpl, nrow),
-		bools:    make([]bool, nrow),
+		value:    make([]bool, nrow),
 	}
 }
 
-//noinspection SpellCheckingInspection
 func (bs *boolSeries) Copy() Series {
-	vcp := make([]bool, len(bs.bools))
-	copy(vcp, bs.bools)
+	vcp := make([]bool, len(bs.value))
+	copy(vcp, bs.value)
 
 	nacp := make(naImpl, len(bs.naImpl))
 	copy(nacp, bs.naImpl)
 
 	return &boolSeries{
 		nameImpl: bs.nameImpl,
-		bools:    vcp,
+		value:    vcp,
 		naImpl:   nacp,
 	}
 }
 
 func (bs *boolSeries) Type() Type            { return Bool }
-func (bs *boolSeries) Bool(i int) bool       { return bs.bools[i] }
-func (bs *boolSeries) SetBool(i int, v bool) { bs.bools[i] = v }
+func (bs *boolSeries) GetBool(i int) bool    { return bs.value[i] }
+func (bs *boolSeries) SetBool(i int, v bool) { bs.value[i] = v }
 
 func (bs *boolSeries) Select(indexes []int) Series {
 	v := make([]bool, len(indexes))
 	na := make(naImpl, len(indexes))
 
 	for i, index := range indexes {
-		v[i] = bs.bools[index]
+		v[i] = bs.value[index]
 		na[i] = bs.naImpl[index]
 	}
 	return &boolSeries{
 		nameImpl: bs.nameImpl,
-		bools:    v,
+		value:    v,
 		naImpl:   na,
 	}
+}
+
+func (bs *boolSeries) String() string {
+	builder := strings.Builder{}
+	for i := range bs.value {
+		if i != 0 {
+			builder.WriteString(", ")
+		}
+
+		if bs.IsNA(i) {
+			builder.WriteString("NA")
+		} else {
+			builder.WriteString(fmt.Sprint(bs.value[i]))
+		}
+	}
+	return builder.String()
 }
 
 type numberSeries struct {
@@ -58,49 +77,64 @@ type numberSeries struct {
 
 	nameImpl
 	naImpl
-	numbers []float64
+	value []float64
 }
 
 func NewNumberSeries(name string, nrow int) Series {
 	return &numberSeries{
 		nameImpl: nameImpl(name),
 		naImpl:   make(naImpl, nrow),
-		numbers:  make([]float64, nrow),
+		value:    make([]float64, nrow),
 	}
 }
 
-//noinspection SpellCheckingInspection
 func (fs *numberSeries) Copy() Series {
-	vcp := make([]float64, len(fs.numbers))
-	copy(vcp, fs.numbers)
+	vcp := make([]float64, len(fs.value))
+	copy(vcp, fs.value)
 
 	nacp := make(naImpl, len(fs.naImpl))
 	copy(nacp, fs.naImpl)
 
 	return &numberSeries{
 		nameImpl: fs.nameImpl,
-		numbers:  vcp,
+		value:    vcp,
 		naImpl:   nacp,
 	}
 }
 
 func (fs *numberSeries) Type() Type                 { return Number }
-func (fs *numberSeries) Number(i int) float64       { return fs.numbers[i] }
-func (fs *numberSeries) SetNumber(i int, v float64) { fs.numbers[i] = v }
+func (fs *numberSeries) GetNumber(i int) float64    { return fs.value[i] }
+func (fs *numberSeries) SetNumber(i int, v float64) { fs.value[i] = v }
 
 func (fs *numberSeries) Select(indexes []int) Series {
 	v := make([]float64, len(indexes))
 	na := make(naImpl, len(indexes))
 
 	for i, index := range indexes {
-		v[i] = fs.numbers[index]
+		v[i] = fs.value[index]
 		na[i] = fs.naImpl[index]
 	}
 	return &numberSeries{
 		nameImpl: fs.nameImpl,
-		numbers:  v,
+		value:    v,
 		naImpl:   na,
 	}
+}
+
+func (fs *numberSeries) String() string {
+	builder := strings.Builder{}
+	for i := range fs.value {
+		if i != 0 {
+			builder.WriteString(", ")
+		}
+
+		if fs.IsNA(i) {
+			builder.WriteString("NA")
+		} else {
+			builder.WriteString(fmt.Sprint(fs.value[i]))
+		}
+	}
+	return builder.String()
 }
 
 type stringSeries struct {
@@ -109,48 +143,64 @@ type stringSeries struct {
 
 	nameImpl
 	naImpl
-	strings []string
+	value []string
 }
 
 func NewStringSeries(name string, nrow int) Series {
 	return &stringSeries{
 		nameImpl: nameImpl(name),
 		naImpl:   make(naImpl, nrow),
-		strings:  make([]string, nrow),
+		value:    make([]string, nrow),
 	}
 }
 
 func (ss *stringSeries) Copy() Series {
-	vcp := make([]string, len(ss.strings))
-	copy(vcp, ss.strings)
+	vcp := make([]string, len(ss.value))
+	copy(vcp, ss.value)
 
 	nacp := make(naImpl, len(ss.naImpl))
 	copy(nacp, ss.naImpl)
 
 	return &stringSeries{
 		nameImpl: ss.nameImpl,
-		strings:  vcp,
+		value:    vcp,
 		naImpl:   nacp,
 	}
 }
 
 func (ss *stringSeries) Type() Type                { return String }
-func (ss *stringSeries) String(i int) string       { return ss.strings[i] }
-func (ss *stringSeries) SetString(i int, v string) { ss.strings[i] = v }
+func (ss *stringSeries) GetString(i int) string    { return ss.value[i] }
+func (ss *stringSeries) SetString(i int, v string) { ss.value[i] = v }
 
 func (ss *stringSeries) Select(indexes []int) Series {
 	v := make([]string, len(indexes))
 	na := make(naImpl, len(indexes))
 
 	for i, index := range indexes {
-		v[i] = ss.strings[index]
+		v[i] = ss.value[index]
 		na[i] = ss.naImpl[index]
 	}
 	return &stringSeries{
 		nameImpl: ss.nameImpl,
-		strings:  v,
+		value:    v,
 		naImpl:   na,
 	}
+}
+
+func (ss *stringSeries) String() string {
+	builder := strings.Builder{}
+	for i := range ss.value {
+		if i != 0 {
+			builder.WriteString(", ")
+		}
+
+		if ss.IsNA(i) {
+			builder.WriteString("NA")
+		} else {
+			builder.WriteString(fmt.Sprint(ss.value[i]))
+		}
+	}
+	return builder.String()
 }
 
 type placeholderSeries struct {
@@ -175,3 +225,7 @@ func (ps *placeholderSeries) Len() int            { return ps.nrow }
 func (ps *placeholderSeries) Type() Type          { return None }
 func (ps *placeholderSeries) Copy() Series        { return ps }
 func (ps *placeholderSeries) Select([]int) Series { return ps }
+func (ps *placeholderSeries) String() string {
+	s := strings.Repeat("NA ", ps.Len())
+	return s[:len(s)-1]
+}

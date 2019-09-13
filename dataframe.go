@@ -15,17 +15,30 @@ type DataFrame interface {
 
 	Select(indexes []int) DataFrame
 	Copy() DataFrame
+
+	String() string
 }
 
-func NewDataFrame(nrow int) DataFrame {
+type formatter func(DataFrame) string
+
+func NewDataFrame(nrow int, options ...Option) DataFrame {
+	ov := newOptionValues()
+	for _, o := range options {
+		o(ov)
+	}
+
 	return &dataFrame{
 		nrow: nrow,
+
+		formatter: ov.formatter,
 	}
 }
 
 type dataFrame struct {
 	nrow   int
 	series []Series
+
+	formatter formatter
 }
 
 func (df *dataFrame) NRow() int {
@@ -112,4 +125,8 @@ func (df *dataFrame) Select(indexes []int) DataFrame {
 	}
 
 	return ndf
+}
+
+func (df *dataFrame) String() string {
+	return df.formatter(df)
 }

@@ -16,14 +16,15 @@ type Series interface {
 	Len() int
 	Copy() Series
 	Select(indexed []int) Series
+	String() string
 
-	Bool(i int) bool
+	GetBool(i int) bool
 	SetBool(i int, v bool)
 
-	Number(i int) float64
+	GetNumber(i int) float64
 	SetNumber(i int, v float64)
 
-	String(i int) string
+	GetString(i int) string
 	SetString(i int, v string)
 
 	IsNA(i int) bool
@@ -36,11 +37,11 @@ type disableString struct{}
 type nameImpl string
 type naImpl []bool
 
-func (disableBool) Bool(i int) bool              { panic("disabled") }
+func (disableBool) GetBool(i int) bool           { panic("disabled") }
 func (disableBool) SetBool(i int, v bool)        { panic("disabled") }
-func (disableNumber) Number(i int) float64       { panic("disabled") }
+func (disableNumber) GetNumber(i int) float64    { panic("disabled") }
 func (disableNumber) SetNumber(i int, v float64) { panic("disabled") }
-func (disableString) String(i int) string        { panic("disabled") }
+func (disableString) GetString(i int) string     { panic("disabled") }
 func (disableString) SetString(i int, v string)  { panic("disabled") }
 
 func (n *nameImpl) Name() string    { return string(*n) }
