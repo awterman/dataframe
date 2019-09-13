@@ -13,8 +13,8 @@ type DataFrame interface {
 	SetSeriesDirectly(index int, series Series) error
 	AppendSeries(series ...Series) error
 
-	Select(indexes []int) DataFrame
 	Copy() DataFrame
+	Select(indexes []int) DataFrame
 
 	String() string
 }

@@ -51,6 +51,10 @@ func (b *Builder) parseValue(v interface{}) (t dataframe.Type, set func(datafram
 		n = float64(vv)
 	case uint64:
 		n = float64(vv)
+	case float32:
+		n = float64(vv)
+	case float64:
+		n = float64(vv)
 	default:
 		panic(fmt.Sprintf("unsupported type: %T", vv))
 	}
