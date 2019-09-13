@@ -11,7 +11,7 @@ type DataFrame interface {
 	SetSeries(series Series) error
 	// SetSeriesDirectly set series by index, without looking up by name of series.
 	SetSeriesDirectly(index int, series Series) error
-	AppendSeries(series Series)
+	AppendSeries(series ...Series) error
 
 	Select(indexes []int) DataFrame
 	Copy() DataFrame
@@ -81,8 +81,14 @@ func (df *dataFrame) SetSeriesDirectly(index int, series Series) error {
 	return nil
 }
 
-func (df *dataFrame) AppendSeries(series Series) {
-	df.SetSeriesDirectly(df.NRow(), series)
+func (df *dataFrame) AppendSeries(series ...Series) error {
+	for _, s := range series {
+		if s.Len() != df.nrow {
+			return fmt.Errorf("%s: nrow not equal", s.Name())
+		}
+	}
+
+	df.series = append(df.series, series...)
 }
 
 func (df *dataFrame) Copy() DataFrame {

@@ -63,7 +63,7 @@ func (b *Builder) WriteRow(row map[string]interface{}) {
 		index, col, ok := b.GetSeries(colName)
 		if !ok {
 			col = dataframe.NewSeries(t, colName, b.NRow())
-			b.SetSeriesDirectly(b.NCol(), col)
+			b.AppendSeries(col)
 		} else if col.Type() == dataframe.None && t != dataframe.None {
 			col = dataframe.NewSeries(t, colName, b.NRow())
 			b.SetSeriesDirectly(index, col)
