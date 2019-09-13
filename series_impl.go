@@ -1,5 +1,6 @@
 package dataframe
 
+//noinspection SpellCheckingInspection
 type boolSeries struct {
 	disableNumber
 	disableString
@@ -17,6 +18,7 @@ func NewBoolSeries(name string, nrow int) Series {
 	}
 }
 
+//noinspection SpellCheckingInspection
 func (bs *boolSeries) Copy() Series {
 	vcp := make([]bool, len(bs.bools))
 	copy(vcp, bs.bools)
@@ -67,6 +69,7 @@ func NewNumberSeries(name string, nrow int) Series {
 	}
 }
 
+//noinspection SpellCheckingInspection
 func (fs *numberSeries) Copy() Series {
 	vcp := make([]float64, len(fs.numbers))
 	copy(vcp, fs.numbers)

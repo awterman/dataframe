@@ -22,11 +22,11 @@ func Combine(a, b dataframe.DataFrame) (dataframe.DataFrame, error) {
 
 	c := dataframe.NewDataFrame(a.NRow())
 	for _, s := range a.GetAllSeries() {
-		c.SetSeries(s)
+		c.AppendSeries(s)
 	}
 
 	for _, s := range b.GetAllSeries() {
-		c.SetSeries(s)
+		c.AppendSeries(s)
 	}
 
 	return c, nil
@@ -38,12 +38,12 @@ func Sort(df dataframe.DataFrame, colName string, lesser func(col dataframe.Seri
 		return nil, fmt.Errorf("series not found")
 	}
 
-	rowIndexs := range_(df.NRow())
-	sort.Slice(rowIndexs, lesser(col))
+	rowIndexes := range_(df.NRow())
+	sort.Slice(rowIndexes, lesser(col))
 
 	ndf := dataframe.NewDataFrame(df.NRow())
 	for _, s := range df.GetAllSeries() {
-		df.SetSeries(s.Select(rowIndexs))
+		df.AppendSeries(s.Select(rowIndexes))
 	}
 	return ndf, nil
 }

@@ -5,7 +5,7 @@
 
 ## Features
 - Support *bool*, *number*, *string* and custom types.
-- Seperate dataFrame implementation and operation functions, which means custom functions are easy to define.
+- Separate dataFrame implementation and operation functions, which means custom functions are easy to define.
 - Less interfaces and pointers, higher performance.
 
 ## Design
