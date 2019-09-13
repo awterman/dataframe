@@ -154,8 +154,8 @@ type placeholderSeries struct {
 	disableBool
 	disableNumber
 	disableString
-	nameImpl
 
+	nameImpl
 	nrow int
 }
 

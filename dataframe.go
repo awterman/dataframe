@@ -9,6 +9,11 @@ type DataFrame interface {
 	GetAllSeries() []Series
 	GetSeries(name string) (index int, s Series, ok bool)
 	SetSeries(series Series) error
+	// SetSeriesDirectly set series by index, without lookup by name of series.
+	SetSeriesDirectly(index int, series Series) error
+
+	Select(indexes []int) DataFrame
+	Copy() DataFrame
 }
 
 func NewDataFrame(nrow int) DataFrame {
@@ -40,7 +45,7 @@ func (df *dataFrame) GetSeries(name string) (index int, s Series, ok bool) {
 			return i, s, true
 		}
 	}
-	return 0, nil, false
+	return -1, nil, false
 }
 
 func (df *dataFrame) SetSeries(series Series) error {
@@ -55,4 +60,46 @@ func (df *dataFrame) SetSeries(series Series) error {
 
 	df.series = append(df.series, series)
 	return nil
+}
+
+func (df *dataFrame) SetSeriesDirectly(index int, series Series) error {
+	if index > len(df.series) {
+		return fmt.Errorf("out of range")
+	}
+
+	if series.Len() != df.nrow {
+		return fmt.Errorf("nrow not equal")
+	}
+
+	if index == len(df.series) {
+		df.series = append(df.series, series)
+		return nil
+	}
+
+	df.series[index] = series
+	return nil
+}
+
+func (df *dataFrame) Copy() DataFrame {
+	return df.Select(range_(df.NCol()))
+}
+
+func (df *dataFrame) Select(indexes []int) DataFrame {
+	ndf := NewDataFrame(df.NRow())
+
+	series := df.GetAllSeries()
+
+	for _, index := range indexes {
+		ndf.SetSeries(series[index])
+	}
+
+	return ndf
+}
+
+func range_(n int) []int {
+	r := make([]int, n)
+	for i := range r {
+		r[i] = i
+	}
+	return r
 }

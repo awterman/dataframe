@@ -60,10 +60,13 @@ func (b *Builder) WriteRow(row map[string]interface{}) {
 	for colName, value := range row {
 		t, set := b.parseValue(value)
 
-		_, col, ok := b.GetSeries(colName)
-		if !ok || (col.Type() == dataframe.None && t != dataframe.None) {
-			col := dataframe.NewSeries(t, colName, b.NRow())
-			b.SetSeries(col)
+		index, col, ok := b.GetSeries(colName)
+		if !ok {
+			col = dataframe.NewSeries(t, colName, b.NRow())
+			b.SetSeriesDirectly(b.NCol(), col)
+		} else if col.Type() == dataframe.None && t != dataframe.None {
+			col = dataframe.NewSeries(t, colName, b.NRow())
+			b.SetSeriesDirectly(index, col)
 		}
 
 		set(col)

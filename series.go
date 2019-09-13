@@ -50,6 +50,12 @@ func (na naImpl) IsNA(i int) bool { return na[i] }
 func (na naImpl) SetNA(i int)     { na[i] = true }
 func (na naImpl) Len() int        { return len(na) }
 
+type CustomSeries struct {
+	disableBool
+	disableNumber
+	disableString
+}
+
 func NewSeries(t Type, name string, nrow int) Series {
 	var f func(name string, nrow int) Series
 

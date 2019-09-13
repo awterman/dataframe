@@ -7,28 +7,12 @@ import (
 	"sort"
 )
 
-func Range(n int) []int {
+func range_(n int) []int {
 	r := make([]int, n)
 	for i := range r {
 		r[i] = i
 	}
 	return r
-}
-
-func Copy(df dataframe.DataFrame) dataframe.DataFrame {
-	return Select(df, Range(df.NCol()))
-}
-
-func Select(df dataframe.DataFrame, indexes []int) dataframe.DataFrame {
-	ndf := dataframe.NewDataFrame(df.NRow())
-
-	series := df.GetAllSeries()
-
-	for _, index := range indexes {
-		ndf.SetSeries(series[index])
-	}
-
-	return ndf
 }
 
 func Combine(a, b dataframe.DataFrame) (dataframe.DataFrame, error) {
@@ -54,7 +38,7 @@ func Sort(df dataframe.DataFrame, colName string, lesser func(col dataframe.Seri
 		return nil, fmt.Errorf("series not found")
 	}
 
-	rowIndexs := Range(df.NRow())
+	rowIndexs := range_(df.NRow())
 	sort.Slice(rowIndexs, lesser(col))
 
 	ndf := dataframe.NewDataFrame(df.NRow())
