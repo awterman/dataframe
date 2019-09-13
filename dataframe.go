@@ -9,7 +9,7 @@ type DataFrame interface {
 	GetAllSeries() []Series
 	GetSeries(name string) (index int, s Series, ok bool)
 	SetSeries(series Series) error
-	// SetSeriesDirectly set series by index, without lookup by name of series.
+	// SetSeriesDirectly set series by index, without looking up by name of series.
 	SetSeriesDirectly(index int, series Series) error
 
 	Select(indexes []int) DataFrame
