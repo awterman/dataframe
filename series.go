@@ -35,7 +35,7 @@ type disableBool struct{}
 type disableNumber struct{}
 type disableString struct{}
 type nameImpl string
-type naImpl []bool
+type hasValueImpl []bool
 
 func (disableBool) GetBool(i int) bool           { panic("disabled") }
 func (disableBool) SetBool(i int, v bool)        { panic("disabled") }
@@ -47,9 +47,8 @@ func (disableString) SetString(i int, v string)  { panic("disabled") }
 func (n *nameImpl) Name() string    { return string(*n) }
 func (n *nameImpl) Rename(s string) { *n = nameImpl(s) }
 
-func (na naImpl) IsNA(i int) bool { return na[i] }
-func (na naImpl) SetNA(i int)     { na[i] = true }
-func (na naImpl) Len() int        { return len(na) }
+func (na hasValueImpl) IsNA(i int) bool { return !na[i] }
+func (na hasValueImpl) Len() int        { return len(na) }
 
 type CustomSeries struct {
 	disableBool
